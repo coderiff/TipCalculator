@@ -16,28 +16,43 @@ class SettingsViewController: UIViewController {
 
     @IBOutlet weak var stepper: UIStepper!
     
+    //sets the title (tip percentage) of a segment in the UISegmentedControl
+    func setTipPercentage(control: UISegmentedControl, percentage: Int, segmentIndex: Int) {
+        
+        control.setTitle(String(percentage)+"%", forSegmentAt: segmentIndex)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
         
-        //load saved values
+        //retrive saved data
         let defaults = UserDefaults.standard
         var tip1 = defaults.integer(forKey: "tip1")
         var tip2 = defaults.integer(forKey: "tip2")
         var tip3 = defaults.integer(forKey: "tip3")
         let defaultIdx = defaults.integer(forKey: "default")
 
+        //fallback to default values if no saved data
         if tip1 == 0 { tip1 = 18 }
         if tip2 == 0 { tip2 = 20 }
         if tip3 == 0 { tip3 = 22 }
         
-        tipControl.setTitle(String(tip1)+"%", forSegmentAt: 0)
-        tipControl.setTitle(String(tip2)+"%", forSegmentAt: 1)
-        tipControl.setTitle(String(tip3)+"%", forSegmentAt: 2)
-
-        defaultControl.setTitle(String(tip1)+"%", forSegmentAt: 0)
-        defaultControl.setTitle(String(tip2)+"%", forSegmentAt: 1)
-        defaultControl.setTitle(String(tip3)+"%", forSegmentAt: 2)
+        setTipPercentage(control: tipControl, percentage: tip1, segmentIndex: 0)
+        setTipPercentage(control: tipControl, percentage: tip2, segmentIndex: 1)
+        setTipPercentage(control: tipControl, percentage: tip3, segmentIndex: 2)
+        
+        setTipPercentage(control: defaultControl, percentage: tip1, segmentIndex: 0)
+        setTipPercentage(control: defaultControl, percentage: tip2, segmentIndex: 1)
+        setTipPercentage(control: defaultControl, percentage: tip3, segmentIndex: 2)
+        
+//        tipControl.setTitle(String(tip1)+"%", forSegmentAt: 0)
+//        tipControl.setTitle(String(tip2)+"%", forSegmentAt: 1)
+//        tipControl.setTitle(String(tip3)+"%", forSegmentAt: 2)
+//
+//        defaultControl.setTitle(String(tip1)+"%", forSegmentAt: 0)
+//        defaultControl.setTitle(String(tip2)+"%", forSegmentAt: 1)
+//        defaultControl.setTitle(String(tip3)+"%", forSegmentAt: 2)
+        
         defaultControl.selectedSegmentIndex = defaultIdx
         
         //set cutomizable tip fields with the saved value
@@ -48,7 +63,6 @@ class SettingsViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
 
     override func viewWillDisappear(_ animated: Bool) {
         //save tip percentage data
@@ -72,7 +86,6 @@ class SettingsViewController: UIViewController {
         defaults.synchronize()
     }
     
-    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -80,8 +93,7 @@ class SettingsViewController: UIViewController {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         
-            }
-    
+    }
     
     @IBAction func onSegmentValueChanged(_ sender: UISegmentedControl) {
         let index = sender.selectedSegmentIndex
